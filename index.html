@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker and Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #34495e;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #faf6f6;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #34495e;
+        }
+
+        #strength {
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .strength-bar {
+            height: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background-color: #ecf0f1;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .strength-bar div {
+            height: 100%;
+            transition: width 0.3s;
+        }
+
+        #weak {
+            background-color: #e74c3c;
+        }
+
+        #medium {
+            background-color: #f39c12;
+        }
+
+        #strong {
+            background-color: #2ecc71;
+        }
+
+        .btn {
+            background-color: #e67e22;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #d35400;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Password Strength Checker & Generator</h1>
+        <input type="text" id="password" placeholder="Enter password" oninput="checkStrength()">
+        <div id="strength">Strength: <span id="strength-value">None</span></div>
+        <div class="strength-bar">
+            <div id="strength-indicator"></div>
+        </div>
+        <button class="btn" onclick="generatePassword()">Generate Password</button>
+    </div>
+
+    <script>
+        function checkStrength() {
+            const password = document.getElementById('password').value;
+            const strengthValue = document.getElementById('strength-value');
+            const strengthIndicator = document.getElementById('strength-indicator');
+
+            let strength = 0;
+            if (password.length > 5) strength += 1;
+            if (password.match(/[A-Z]/)) strength += 1;
+            if (password.match(/[a-z]/)) strength += 1;
+            if (password.match(/[0-9]/)) strength += 1;
+            if (password.match(/[\W_]/)) strength += 1;
+
+            switch (strength) {
+                case 0:
+                    strengthValue.textContent = 'None';
+                    strengthIndicator.style.width = '0';
+                    break;
+                case 1:
+                case 2:
+                    strengthValue.textContent = 'Weak';
+                    strengthIndicator.style.width = '33%';
+                    strengthIndicator.style.backgroundColor = '#e74c3c';
+                    break;
+                case 3:
+                case 4:
+                    strengthValue.textContent = 'Medium';
+                    strengthIndicator.style.width = '66%';
+                    strengthIndicator.style.backgroundColor = '#f39c12';
+                    break;
+                case 5:
+                    strengthValue.textContent = 'Strong';
+                    strengthIndicator.style.width = '100%';
+                    strengthIndicator.style.backgroundColor = '#2ecc71';
+                    break;
+            }
+        }
+
+        function generatePassword() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                const randomIndex = Math.floor(Math.random() * chars.length);
+                password += chars[randomIndex];
+            }
+            document.getElementById('password').value = password;
+            checkStrength();
+        }
+    </script>
+</body>
+</html>
